@@ -1,5 +1,7 @@
 use crate::parser;
 use crate::utils;
+const TR_HEADER: &str = r#"#[macro_use]
+extern crate tr;"#;
 
 const HEADER: &str = r#"
 use fltk::browser::*;
@@ -837,6 +839,9 @@ pub fn generate(ast: &[parser::Token]) -> String {
             _ => (),
         }
         last_ast = elem.typ.clone();
+    }
+    if unsafe { crate::parser::PROGRAM.i18n } {
+        return format!("{}\n{}\n\n{}\n\n{}\n{}\n", TR_HEADER, HEADER, decls, s, imp);
     }
     format!("{}\n\n{}\n\n{}\n{}\n", HEADER, decls, s, imp)
 }
